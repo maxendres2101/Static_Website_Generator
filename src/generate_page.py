@@ -30,10 +30,10 @@ def generate_page(from_path, template_path, dest_path, basepath):
 
     #print(f"Title: {title}")
 
-    title_template = template.replace("{{ Title }}", title)
-    full_template = title_template.replace("{{ Content }}", html_string)
-    href_template = full_template.replace('href="/', 'href="' + basepath)
-    src_template = href_template.replace('src="/', 'src="' + basepath)
+    template = template.replace("{{ Title }}", title)
+    template = template.replace("{{ Content }}", html_string)
+    template = template.replace('href="/', 'href="' + basepath)
+    template = template.replace('src="/', 'src="' + basepath)
     #print(f"Template: {full_template}, Template Type: {type(template)}")
     #print(f"os path dirname: {os.path.dirname(dest_path)}")
     directory = os.path.dirname(dest_path)
@@ -41,7 +41,7 @@ def generate_page(from_path, template_path, dest_path, basepath):
         os.makedirs(directory, exist_ok=True)
 
     with open(dest_path, 'w') as f:
-        f.write(src_template)
+        f.write(template)
         
 
 def generate_page_recursive(dir_path_content, template_path, dest_dir_path, basepath):
@@ -52,6 +52,6 @@ def generate_page_recursive(dir_path_content, template_path, dest_dir_path, base
         
         if os.path.isfile(from_path):
             print(f"Generating page {from_path} -> {dest_path}")
-            generate_page(from_path, template_path, str(Path(dest_path).with_suffix(".html")), basepath)
+            generate_page(from_path, template_path, Path(dest_path).with_suffix(".html"), basepath)
         else:
             generate_page_recursive(from_path, template_path, dest_path, basepath)
