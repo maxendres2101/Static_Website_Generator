@@ -1,15 +1,24 @@
 from textnode import TextNode, TextType
 from htmlnode import HTMLNode
 import os
+import shutil
+
+from copystatic import copy_files_recursive
+from generate_page import generate_page_recursive
+
+dir_path_public = "./public"
+dir_path_static = "./static"
+
 
 def main():
-    copy_content("test", "src")
+    print("Deleting public directory...")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
 
+    print("Copying static files to public directory...")
+    copy_files_recursive(dir_path_static, dir_path_public)
 
-def copy_content(source, des):
-    if os.path.exists(f"./{des}"):
-        print(os.listdir(f"./{des}"))
-    else:
-        print("not found")
+    generate_page_recursive("./content", "template.html", "./public")
+
 
 main()
